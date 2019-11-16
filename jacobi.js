@@ -10,7 +10,7 @@ var Rij = function(k,l,theta,N){
     }
     // Identity Matrix
     for (var i = 0; i<N;i++){
-        for (var j = 0; i<N;i++){
+        for (var j = 0; j<N;j++){
             Mat[i][j] = (i===j)*1.0;
         }
     }
