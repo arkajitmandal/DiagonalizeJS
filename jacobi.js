@@ -1,8 +1,9 @@
+// Rotation Matrix
 var Rot = function(theta){
     var Mat = [[Math.cos(theta),Math.sin(theta)],[-Math.sin(theta),Math.cos(theta)]];
     return Mat
 }
-
+// Givens Matrix
 var Rij = function(k,l,theta,N){
     var Mat = Array(N) 
     for (var i = 0; i<N;i++){
@@ -22,4 +23,18 @@ var Rij = function(k,l,theta,N){
     Mat[k][l] = Rij[0][1] // 12
     Mat[l][k] = Rij[1][0] // 21
     return Mat
+}
+
+// get angle
+var getTheta = function(aii,ajj,aij){
+    var  th = 0.0 
+    var denom = (ajj - aii);
+    if (abs(denom) <= 1E-10){
+        th = (aij/abs(aij)) * Math.PI/4.0
+    }
+    else {
+        th = 0.5 * Math.atan(2.0 * aij / (ajj - aii) ) 
+    }
+    
+    return th 
 }
