@@ -44,8 +44,8 @@ var getAij = function(Mij){
     var maxIJ  = [0,1];
     for (var i = 0; i<N;i++){
         for (var j = i+1; j<N;j++){ 
-            if (abs(maxMij) <= abs(Mij[i][j])){
-                maxMij = abs(Mij[i][j]);
+            if (Math.abs(maxMij) <= Math.abs(Mij[i][j])){
+                maxMij = Math.abs(Mij[i][j]);
                 maxIJ  = [i,j];
             } 
         }
