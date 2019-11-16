@@ -1,10 +1,10 @@
 var Rot = function(theta){
-    Mat = [[Math.cos(theta),Math.sin(theta)],[-Math.sin(theta),Math.cos(theta)]];
+    var Mat = [[Math.cos(theta),Math.sin(theta)],[-Math.sin(theta),Math.cos(theta)]];
     return Mat
 }
 
-var Rij = function(i,j,theta,N){
-    Mat = Array(N) 
+var Rij = function(k,l,theta,N){
+    var Mat = Array(N) 
     for (var i = 0; i<N;i++){
         Mat[i] = Array(N) 
     }
@@ -15,10 +15,11 @@ var Rij = function(i,j,theta,N){
         }
     }
     Rij = Rot(theta);
+
     // Put Rotation part in i, j
-    Mat[i][i] = Rij[0][0] // 11
-    Mat[j][j] = Rij[1][1] // 22
-    Mat[i][j] = Rij[0][1] // 12
-    Mat[j][i] = Rij[1][0] // 21
+    Mat[k][k] = Rij[0][0] // 11
+    Mat[l][l] = Rij[1][1] // 22
+    Mat[k][l] = Rij[0][1] // 12
+    Mat[l][k] = Rij[1][0] // 21
     return Mat
 }
