@@ -35,6 +35,20 @@ var getTheta = function(aii,ajj,aij){
     else {
         th = 0.5 * Math.atan(2.0 * aij / (ajj - aii) ) 
     }
-    
     return th 
+}
+// get max off-diagonal value
+var getAij = function(Mij){
+    var N = len(Mij);
+    var maxMij = 0.0 ;
+    var maxIJ  = [0,1];
+    for (var i = 0; i<N;i++){
+        for (var j = i+1; j<N;j++){ 
+            if (abs(maxMij) <= abs(Mij[i][j])){
+                maxMij = abs(Mij[i][j]);
+                maxIJ  = [i,j];
+            } 
+        }
+    }
+    return maxIJ
 }
