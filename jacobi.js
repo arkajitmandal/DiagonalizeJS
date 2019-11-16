@@ -39,7 +39,7 @@ var getTheta = function(aii,ajj,aij){
 }
 // get max off-diagonal value
 var getAij = function(Mij){
-    var N = len(Mij);
+    var N = Mij.length;
     var maxMij = 0.0 ;
     var maxIJ  = [0,1];
     for (var i = 0; i<N;i++){
