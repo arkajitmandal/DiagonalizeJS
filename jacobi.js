@@ -129,14 +129,14 @@ var diag = function(Hij, convergence = 1E-7){
     for (var i = 0; i<N;i++){
         Ei[i] = Hij[i][i]; 
     }
-    return [Ei , Sij] 
+    return sorting(Ei , Sij) 
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-async function AsyncDiag(Hij, convergence = 1E-7, level = 1, waitTime = 30){
+async function AsyncDiag(Hij, convergence = 1E-7, level = 1, waitTime = 3000){
     var N = Hij.length; 
     var Ei = Array(N);
     var e0 =  Math.abs(convergence / N)
@@ -184,5 +184,25 @@ async function AsyncDiag(Hij, convergence = 1E-7, level = 1, waitTime = 30){
     for (var i = 0; i<N;i++){
         Ei[i] = Hij[i][i]; 
     }
-    return [Ei , Sij] 
+    return sorting(Ei , Sij) 
+}
+
+var sorting = function(E, S){
+    var N = E.length ; 
+    var Ef = Array(N);
+    var Sf = Array(N);
+    for (var i = 0; i<N;i++){
+        var minID = 0;
+        var minE  = E[0];
+        for (var j = 0; j<E.length;j++){
+            if (E[j] < minE){
+                minID = j ; 
+            }
+        }
+        Ef.push(E[minID]);
+        for (var k = 0; k<N;k++){
+            Sf.push(Sf[k][minID]);
+        }
+    }
+    return [Ef,Sf]
 }
