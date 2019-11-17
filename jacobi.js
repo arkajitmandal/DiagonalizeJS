@@ -15,7 +15,7 @@ var Rij = function(k,l,theta,N){
             Mat[i][j] = (i===j)*1.0;
         }
     }
-    varRotij = Rot(theta);
+    var Rotij = Rot(theta);
 
     // Put Rotation part in i, j
     Mat[k][k] = Rotij[0][0] // 11
@@ -29,8 +29,8 @@ var Rij = function(k,l,theta,N){
 var getTheta = function(aii,ajj,aij){
     var  th = 0.0 
     var denom = (ajj - aii);
-    if (abs(denom) <= 1E-10){
-        th = (aij/abs(aij)) * Math.PI/4.0
+    if (Math.abs(denom) <= 1E-12){
+        th = Math.PI/4.0
     }
     else {
         th = 0.5 * Math.atan(2.0 * aij / (ajj - aii) ) 
@@ -93,7 +93,7 @@ var AxB = function(A,B){
     return Mat;
 }
 
-var diag = function(Hij, convergence = 1E-7, level = 1){
+var diag = function(Hij, convergence = 1E-7, level = 1, tRelax = 30){
     var N = Hij.length; 
     var Ei = Array(N);
     var e0 =  Math.abs(convergence / N)
@@ -111,12 +111,12 @@ var diag = function(Hij, convergence = 1E-7, level = 1){
     // initial error
     var Vab = getAij(Hij); 
     //  jacobi iterations
-    while (abs(Vab[1]) >= abs(e0)){
+    while (Math.abs(Vab[1]) >= Math.abs(e0)){
         // block index to be rotated
         var i =  Vab[0][0];
         var j =  Vab[0][1];
         // get theta
-        var psi = getTheta(Hij[i,i], Hij[j,j], Hij[i,j]); 
+        var psi = getTheta(Hij[i][i], Hij[j][j], Hij[i][j]); 
         // Givens matrix
         var Gij =  Rij(i,j,psi,N);
         // rotate Hamiltonian using Givens
@@ -127,8 +127,8 @@ var diag = function(Hij, convergence = 1E-7, level = 1){
         var Vab = getAij(Hij); 
     }
     for (var i = 0; i<N;i++){
-        Ei = Hij[i,i]; 
+        Ei[i] = Hij[i][i]; 
     }
-    return Ei , Sij 
+    return [Ei , Sij] 
 }
 
