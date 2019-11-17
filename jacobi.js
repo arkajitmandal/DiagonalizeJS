@@ -90,5 +90,6 @@ var AxB = function(A,B){
             }
         }
     }
+    return Mat;
 }
 
