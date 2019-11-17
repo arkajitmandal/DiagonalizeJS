@@ -201,7 +201,7 @@ var sorting = function(E, S){
         }
         Ef.push(E[minID]);
         for (var k = 0; k<N;k++){
-            Sf.push(Sf[k][minID]);
+            Sf.push(S[k][minID]);
         }
     }
     return [Ef,Sf]
