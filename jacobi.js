@@ -54,7 +54,7 @@ var getAij = function(Mij){
 }
 // Unitary Rotation UT x H x U
 var unitary  = function(U,H){
-    N = U.length;
+    var N = U.length;
     // empty NxN matrix
     var Mat = Array(N) 
     for (var i = 0; i<N;i++){
@@ -64,13 +64,30 @@ var unitary  = function(U,H){
     for (var i = 0; i<N;i++){
         for (var j = 0; j<N;j++){
             Mat[i][j] =  0 
-            for (var i = 0; i<N;i++){
-                for (var j = 0; j<N;j++){
+            for (var k = 0; k<N;k++){
+                for (var l = 0; l<N;l++){
                     Mat[i][j] = Mat[i][j] + U[k][i] * H[k][l] * U[l][j];
                 }
             }
         }
     }
     return Mat;
+}
+
+var matmul = function(A,B){
+    var N = A.length;
+    // empty NxN matrix
+    var Mat = Array(N) 
+    for (var i = 0; i<N;i++){
+        Mat[i] = Array(N) 
+    }
+    for (var i = 0; i<N;i++){
+        for (var j = 0; j<N;j++){
+            Mat[i][j] =  0 
+            for (var k = 0; k<N;k++){
+                Mat[i][j] = Mat[i][j] + A[i][k] * B[k][j] ; 
+            }
+        }
+    }
 }
 
