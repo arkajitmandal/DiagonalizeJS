@@ -132,65 +132,14 @@ var diag = function(Hij, convergence = 1E-7){
     return sorting(Ei , Sij) 
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-async function AsyncDiag(Hij, convergence = 1E-7, level = 1, waitTime = 3000){
-    var N = Hij.length; 
-    var Ei = Array(N);
-    var e0 =  Math.abs(convergence / N)
-    // initial vector
-    var Sij = Array(N);
-    for (var i = 0; i<N;i++){
-        Sij[i] = Array(N) 
-    }
-    // Sij is Identity Matrix
-    for (var i = 0; i<N;i++){
-        for (var j = 0; j<N;j++){
-            Sij[i][j] = (i===j)*1.0;
-        }
-    }
-    // initial error
-    var Vab = getAij(Hij); 
-    //  jacobi iterations
-    while (Math.abs(Vab[1]) >= Math.abs(e0)){
-        // block index to be rotated
-        var i =  Vab[0][0];
-        var j =  Vab[0][1];
-        // get theta
-        var psi = getTheta(Hij[i][i], Hij[j][j], Hij[i][j]); 
-        // Givens matrix
-        var Gij =  Rij(i,j,psi,N);
-        //Unfreeze Browser
-        if (level===1){
-            await sleep(waitTime);
-        }
-        // rotate Hamiltonian using Givens
-        Hij = unitary(Gij,Hij); 
-        //Unfreeze Browser
-        if (level===1){
-            await sleep(waitTime);
-        }
-        // Update vectors
-        Sij = AxB(Sij,Gij); 
-        //Unfreeze Browser
-        if (level===1){
-            await sleep(waitTime);
-        }
-        // update error 
-        var Vab = getAij(Hij); 
-    }
-    for (var i = 0; i<N;i++){
-        Ei[i] = Hij[i][i]; 
-    }
-    return sorting(Ei , Sij) 
-}
 
 var sorting = function(E, S){
     var N = E.length ; 
     var Ef = Array(N);
     var Sf = Array(N);
+    for (var k = 0; k<N;k++){
+        Sf[k] = Array(N);
+    }
     for (var i = 0; i<N;i++){
         var minID = 0;
         var minE  = E[0];
@@ -199,9 +148,10 @@ var sorting = function(E, S){
                 minID = j ; 
             }
         }
-        Ef[i] = E.pop(minID);
+        Ef[i] = E.splice(minID,1);
         for (var k = 0; k<N;k++){
-            Sf[i].push(S[k][minID]);
+            Sf[k][i]  = S[k][minID];
+            S[k].splice(minID,1);
         }
     }
     return [Ef,Sf]
