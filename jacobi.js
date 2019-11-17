@@ -199,9 +199,9 @@ var sorting = function(E, S){
                 minID = j ; 
             }
         }
-        Ef.push(E.pop(minID));
+        Ef[i] = E.pop(minID);
         for (var k = 0; k<N;k++){
-            Sf.push(S[k][minID]);
+            Sf[i].push(S[k][minID]);
         }
     }
     return [Ef,Sf]
