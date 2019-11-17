@@ -74,7 +74,8 @@ var unitary  = function(U,H){
     return Mat;
 }
 
-var matmul = function(A,B){
+// Matrix Multiplication
+var AxB = function(A,B){
     var N = A.length;
     // empty NxN matrix
     var Mat = Array(N) 
