@@ -50,7 +50,7 @@ var getAij = function(Mij){
             } 
         }
     }
-    return maxIJ
+    return [maxIJ,maxMij]
 }
 // Unitary Rotation UT x H x U
 var unitary  = function(U,H){
@@ -91,5 +91,44 @@ var AxB = function(A,B){
         }
     }
     return Mat;
+}
+
+var diag = function(Hij, convergence = 1E-7, level = 1){
+    var N = Hij.length; 
+    var Ei = Array(N);
+    var e0 =  Math.abs(convergence / N)
+    // initial vector
+    var Sij = Array(N);
+    for (var i = 0; i<N;i++){
+        Sij[i] = Array(N) 
+    }
+    // Sij is Identity Matrix
+    for (var i = 0; i<N;i++){
+        for (var j = 0; j<N;j++){
+            Sij[i][j] = (i===j)*1.0;
+        }
+    }
+    // initial error
+    var Vab = getAij(Hij); 
+    //  jacobi iterations
+    while (abs(Vab[1]) >= abs(e0)){
+        // block index to be rotated
+        var i =  Vab[0][0];
+        var j =  Vab[0][1];
+        // get theta
+        var psi = getTheta(Hij[i,i], Hij[j,j], Hij[i,j]); 
+        // Givens matrix
+        var Gij =  Rij(i,j,psi,N);
+        // rotate Hamiltonian using Givens
+        Hij = unitary(Gij,Hij); 
+        // Update vectors
+        Sij = AxB(Sij,Gij); 
+        // update error 
+        var Vab = getAij(Hij); 
+    }
+    for (var i = 0; i<N;i++){
+        Ei = Hij[i,i]; 
+    }
+    return Ei , Sij 
 }
 
