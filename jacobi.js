@@ -15,13 +15,13 @@ var Rij = function(k,l,theta,N){
             Mat[i][j] = (i===j)*1.0;
         }
     }
-    Rij = Rot(theta);
+    Rotij = Rot(theta);
 
     // Put Rotation part in i, j
-    Mat[k][k] = Rij[0][0] // 11
-    Mat[l][l] = Rij[1][1] // 22
-    Mat[k][l] = Rij[0][1] // 12
-    Mat[l][k] = Rij[1][0] // 21
+    Mat[k][k] = Rotij[0][0] // 11
+    Mat[l][l] = Rotij[1][1] // 22
+    Mat[k][l] = Rotij[0][1] // 12
+    Mat[l][k] = Rotij[1][0] // 21
     return Mat
 }
 
@@ -37,7 +37,7 @@ var getTheta = function(aii,ajj,aij){
     }
     return th 
 }
-// get max off-diagonal value
+// get max off-diagonal value from Upper Diagonal
 var getAij = function(Mij){
     var N = Mij.length;
     var maxMij = 0.0 ;
@@ -52,3 +52,5 @@ var getAij = function(Mij){
     }
     return maxIJ
 }
+// matrix multiply 
+var matmul3  = function(A,B,C)
