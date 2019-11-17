@@ -15,7 +15,7 @@ var Rij = function(k,l,theta,N){
             Mat[i][j] = (i===j)*1.0;
         }
     }
-    Rotij = Rot(theta);
+    varRotij = Rot(theta);
 
     // Put Rotation part in i, j
     Mat[k][k] = Rotij[0][0] // 11
@@ -52,5 +52,25 @@ var getAij = function(Mij){
     }
     return maxIJ
 }
-// matrix multiply 
-var matmul3  = function(A,B,C)
+// Unitary Rotation UT x H x U
+var unitary  = function(U,H){
+    N = U.length;
+    // empty NxN matrix
+    var Mat = Array(N) 
+    for (var i = 0; i<N;i++){
+        Mat[i] = Array(N) 
+    }
+    // compute element
+    for (var i = 0; i<N;i++){
+        for (var j = 0; j<N;j++){
+            Mat[i][j] =  0 
+            for (var i = 0; i<N;i++){
+                for (var j = 0; j<N;j++){
+                    Mat[i][j] = Mat[i][j] + U[k][i] * H[k][l] * U[l][j];
+                }
+            }
+        }
+    }
+    return Mat;
+}
+
