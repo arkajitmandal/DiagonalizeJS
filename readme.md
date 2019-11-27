@@ -1,5 +1,14 @@
 # About
 This is a simple JavaScript Library for computing eigenvalues, eigenvectors for real symmetric matrix. Uses Jacobi method to perform diagonalization.
+# Working Demo (uses webworker for parallel computation)
+Check this Demo to see for yourself!
+
+# Using single threaded Library
+Note : If you are using this in your app, the browser might freeze if the matrix size too big (N>25). 
+```html
+<script type="text/javascript" src="jacobi.js"></script>
+```
+Use multi-threaded version instead for N>25, code is in <i>jacobi_worker.js</i>. See the <i>index.html</i>  and <i>main.js</i> for implementing the multithreaded version. 
 
 # Basic Usage 
 ```javascript
@@ -20,6 +29,8 @@ Out = diag(Hij,1E-4)
 E = Out[0];
 U = Out[1];
 ```
+
+
 ---
 Arkajit Mandal
 University of Rochester
