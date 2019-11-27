@@ -1,4 +1,4 @@
-<img src="Diagonalize.png" width="100px">
+<img src="Diagonalize.png" width="250px">
 # About
 This is a simple JavaScript Library for computing eigenvalues, eigenvectors for real symmetric matrix. Uses Jacobi method to perform diagonalization.
 # Working Demo (uses webworker for parallel computation)
