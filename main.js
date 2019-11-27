@@ -9,8 +9,8 @@ var start = function(){
     worker.onmessage = function (event) {
         msg =  event.data;
         if (msg.cmd == 'done'){
-            document.getElementById("answer").innerHTML += String(msg.ans[0]) + "<br>";
-            console.log(msg.ans[1]);
+            document.getElementById("answer").innerHTML += String("Eigenvalues: "+msg.ans[0]) + "<br>";
+            console.log("Eigenvector: "+ msg.ans[1]);
         } else {
             document.getElementById("answer").innerHTML += "Running, Error " + String(msg.error) + "<br>"; 
         }
