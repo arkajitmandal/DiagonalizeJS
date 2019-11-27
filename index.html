@@ -1,8 +1,18 @@
 <html>
     <head>
         <script type="text/javascript" src="jacobi.js"></script>
+        <script type="text/javascript" src="main.js"></script>
     </head>
     <body>
-        <input id="matrixInput"> 
+    Error : <input type="text" id = "convergence" value="1E-4"> <br>
+    <textarea rows="10" cols="50" id= "matrix">
+            [[1.0, 1.0, 1.0],
+            [1.0, 1.0, 1.0],
+            [1.0, 1.0, 1.0]]
+    </textarea>
+    <br>
+    <input type="button" onclick="start();" value="Start">
+    <input type="button" onclick="stop();" value="Stop">
+    <div id="answer"></div>
     </body>
 </html>
