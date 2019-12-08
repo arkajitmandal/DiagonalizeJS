@@ -1,6 +1,7 @@
 var worker 
 
 var start = function(){
+    var iter = 0;
     var answer;
     worker = new Worker('jacobi_worker.js');
     var conv = document.getElementById("convergence").value;
@@ -12,7 +13,8 @@ var start = function(){
             document.getElementById("answer").innerHTML += String("Eigenvalues: "+msg.ans[0]) + "<br>";
             console.log("Eigenvector: "+ msg.ans[1]);
         } else {
-            document.getElementById("answer").innerHTML += "Running, Error " + String(msg.error) + "<br>"; 
+            iter += 1;
+            document.getElementById("answer").innerHTML = String(iter) + "<br> Running, Error " + String(msg.error) + "<br>"; 
         }
     };
 }

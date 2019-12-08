@@ -44,7 +44,7 @@ var getAij = function(Mij){
     var maxIJ  = [0,1];
     for (var i = 0; i<N;i++){
         for (var j = i+1; j<N;j++){ 
-            if (Math.abs(maxMij) <= Math.abs(Mij[i][j])){
+            if (Math.abs(maxMij) < Math.abs(Mij[i][j])){
                 maxMij = Math.abs(Mij[i][j]);
                 maxIJ  = [i,j];
             } 
@@ -74,6 +74,42 @@ var unitary  = function(U,H){
     return Mat;
 }
 
+var Hij1 = function(Hij, theta,i,j){
+    let N = Hij.length;
+    let c = Math.cos(theta);
+    let s = Math.sin(theta);
+    let c2 = c * c ; 
+    let s2 = s * s ; 
+    //var Ans = new Array(N).fill(Array(N).fill(0)); 
+    let Aki =  new Array(N).fill(0);
+    let Akj =  new Array(N).fill(0);
+    // Aii
+    let Aii = c2 * Hij[i][i] - 2 * c * s * Hij[i][j] + s2 * Hij[j][j];
+    let Ajj = s2 * Hij[i][i] + 2 * c * s * Hij[i][j] + c2 * Hij[j][j];
+    // 0  to i
+    for (var k=0; k<N; k++){
+        Aki[k] =  c * Hij[i][k] - s * Hij[j][k] ;
+        //Ans[i][k] =  Ans[k][i] ; 
+        Akj[k] =  s * Hij[i][k] + c * Hij[j][k] ;
+        //Ans[j][k] =  Ans[k][j] ; 
+    }
+    // Modify Hij
+    Hij[i][i] = Aii;
+    Hij[j][j] = Ajj;
+    Hij[i][j] = 0;
+    Hij[j][i] = 0;
+    // 0  to i
+    for (var k=0; k<N; k++){
+        if (k!==i && k!==j){
+            Hij[i][k] = Aki[k];
+            Hij[k][i] = Aki[k];
+            Hij[j][k] = Akj[k];
+            Hij[k][j] = Akj[k];
+        }
+    }
+    return Hij;
+ }
+
 // Matrix Multiplication
 var AxB = function(A,B){
     var N = A.length;
@@ -94,19 +130,15 @@ var AxB = function(A,B){
 }
 
 var diag = function(Hij, convergence = 1E-7){
+    let t1 = new Date()
     var N = Hij.length; 
     var Ei = Array(N);
     var e0 =  Math.abs(convergence / N)
     // initial vector
-    var Sij = Array(N);
-    for (var i = 0; i<N;i++){
-        Sij[i] = Array(N) 
-    }
+    var Sij = new Array(N).fill(Array(N).fill(0));
     // Sij is Identity Matrix
     for (var i = 0; i<N;i++){
-        for (var j = 0; j<N;j++){
-            Sij[i][j] = (i===j)*1.0;
-        }
+        Sij[i][i] = 1.0;
     }
     // initial error
     var Vab = getAij(Hij); 
@@ -121,7 +153,14 @@ var diag = function(Hij, convergence = 1E-7){
         // Givens matrix
         var Gij =  Rij(i,j,psi,N);
         // rotate Hamiltonian using Givens
-        Hij = unitary(Gij,Hij); 
+        
+        //Hij = unitary(Gij,Hij); 
+        
+        Hij = Hij1(Hij,psi,i,j);
+        //console.log(Hij);
+        //console.log(i,j);
+        //throw new Error("New went badly wrong!");
+
         // Update vectors
         Sij = AxB(Sij,Gij); 
         // update error 
@@ -130,7 +169,8 @@ var diag = function(Hij, convergence = 1E-7){
     for (var i = 0; i<N;i++){
         Ei[i] = Hij[i][i]; 
     }
-    
+    let t2 = new Date()
+    console.log("Time: " + String(t2-t1));
     var ans = sorting(Ei , Sij) 
     postMessage({'ans':ans,'cmd':'done'});
     //return ans
@@ -170,7 +210,7 @@ onmessage = function(e) {
         
         var Hij = msg.Hij ;
         if (msg.conv != undefined){
-            console.log(Hij);
+            //console.log(Hij);
             diag(Hij,msg.conv);
         }else{
             diag(Hij);
