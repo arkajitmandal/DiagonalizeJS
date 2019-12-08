@@ -109,6 +109,23 @@ var Hij1 = function(Hij, theta,i,j){
     }
     return Hij;
  }
+ 
+ var Sij1 =  function(Sij, theta,i,j){
+    let N = Sij.length;
+    let c = Math.cos(theta);
+    let s = Math.sin(theta);
+    let Ski =  new Array(N).fill(0);
+    let Skj =  new Array(N).fill(0);
+    for (var k=0; k<N; k++){
+        Ski[k] = c * Sij[k][i] - s * Sij[k][j];
+        Skj[k] = s * Sij[k][i] + c * Sij[k][j];
+    }
+    for (var k=0; k<N; k++){
+        Sij[k][i] =  Ski[k] ;
+        Sij[k][j] =  Skj[k] ;
+    }
+    return Sij;
+}
 
 // Matrix Multiplication
 var AxB = function(A,B){
@@ -135,9 +152,10 @@ var diag = function(Hij, convergence = 1E-7){
     var Ei = Array(N);
     var e0 =  Math.abs(convergence / N)
     // initial vector
-    var Sij = new Array(N).fill(Array(N).fill(0));
+    var Sij = new Array(N);
     // Sij is Identity Matrix
     for (var i = 0; i<N;i++){
+        Sij[i] = Array(N).fill(0)
         Sij[i][i] = 1.0;
     }
     // initial error
@@ -151,7 +169,7 @@ var diag = function(Hij, convergence = 1E-7){
         // get theta
         var psi = getTheta(Hij[i][i], Hij[j][j], Hij[i][j]); 
         // Givens matrix
-        var Gij =  Rij(i,j,psi,N);
+        //var Gij =  Rij(i,j,psi,N);
         // rotate Hamiltonian using Givens
         
         //Hij = unitary(Gij,Hij); 
@@ -159,10 +177,11 @@ var diag = function(Hij, convergence = 1E-7){
         Hij = Hij1(Hij,psi,i,j);
         //console.log(Hij);
         //console.log(i,j);
-        //throw new Error("New went badly wrong!");
-
         // Update vectors
-        Sij = AxB(Sij,Gij); 
+        //Sij = AxB(Sij,Gij); 
+        //console.log(Sij);
+        Sij = Sij1(Sij,psi,i,j);
+        
         // update error 
         Vab = getAij(Hij); 
     }
@@ -193,13 +212,13 @@ var sorting = function(E, S){
                 minE  = E[minID];
             }
         }
-        Ef[i] = E.splice(minID,1);
+        Ef[i] = E.splice(minID,1)[0];
         for (var k = 0; k<N;k++){
             Sf[k][i]  = S[k][minID];
             S[k].splice(minID,1);
         }
     }
-    return [Ef,Sf]
+    return {'E':JSON.stringify(Ef),'U':JSON.stringify(Sf)}
 }
 
 onmessage = function(e) {

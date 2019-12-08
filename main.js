@@ -1,6 +1,11 @@
 var worker 
 
 var start = function(){
+    try {
+        //worker.terminate();
+    } catch (error) {
+        //pass;
+    }
     var iter = 0;
     var answer;
     worker = new Worker('jacobi_worker.js');
@@ -10,8 +15,9 @@ var start = function(){
     worker.onmessage = function (event) {
         msg =  event.data;
         if (msg.cmd == 'done'){
-            document.getElementById("answer").innerHTML += String("Eigenvalues: "+msg.ans[0]) + "<br>";
-            console.log("Eigenvector: "+ msg.ans[1]);
+            document.getElementById("eigen").value = msg.ans.E;
+            document.getElementById("vector").value = msg.ans.U;
+            //worker.terminate();
         } else {
             iter += 1;
             document.getElementById("answer").innerHTML = String(iter) + "<br> Running, Error " + String(msg.error) + "<br>"; 
