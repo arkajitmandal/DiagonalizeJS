@@ -160,9 +160,16 @@ var diag = function(Hij, convergence = 1E-7){
     }
     // initial error
     var Vab = getAij(Hij); 
+    var Vabold = Vab[1];
+    var iter = 0 ;
     //  jacobi iterations
     while (Math.abs(Vab[1]) >= Math.abs(e0)){
-        postMessage({'error':Vab[1],'cmd':'running'});
+        iter += 1;
+        //console.log(Math.log(Vabold/Vab[1]));
+        if (Math.log(Vabold/Vab[1])>1.0){
+            Vabold = Vab[1];
+            postMessage({'error':Vab[1],'cmd':'running','iter':iter});
+        }
         // block index to be rotated
         var i =  Vab[0][0];
         var j =  Vab[0][1];

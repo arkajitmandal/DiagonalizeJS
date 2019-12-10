@@ -2,7 +2,7 @@ var worker
 
 var start = function(){
     try {
-        //worker.terminate();
+        worker.terminate();
     } catch (error) {
         //pass;
     }
@@ -20,7 +20,7 @@ var start = function(){
             //worker.terminate();
         } else {
             iter += 1;
-            document.getElementById("answer").innerHTML = String(iter) + "<br> Running, Error " + String(msg.error) + "<br>"; 
+            document.getElementById("answer").innerHTML = String(msg.iter) + "<br> Running, Error " + String(msg.error) + "<br>"; 
         }
     };
 }
